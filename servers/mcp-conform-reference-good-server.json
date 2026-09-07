@@ -1,0 +1,9 @@
+{
+  "name": "mcp-conform-reference-good-server",
+  "repo_url": "https://github.com/jayblast-spec/mcp-conform",
+  "transport": "stdio",
+  "setup_commands": ["pip install -r requirements-dev.txt"],
+  "launch_command": "python fixtures/good_server.py",
+  "url": null,
+  "note": "Seed entry: mcp-conform's own positive-control fixture, used to prove the registry pipeline end to end. Not a product — register a real server via PR."
+}

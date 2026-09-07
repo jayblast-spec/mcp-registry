@@ -1,0 +1,63 @@
+name: run-registry
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  schedule:
+    # Re-test every registered server daily — catches a server that was
+    # compliant when added but regressed since (a spec update, a bad
+    # release). A registry that only tests on submission goes stale.
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  test-registry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install
+        run: pip install -r requirements.txt
+
+      - name: Run mcp-conform against every registered server
+        run: python scripts/run_registry.py
+
+      - name: Generate badges and static site
+        run: python scripts/generate_badges.py
+
+      - name: Upload docs/ as Pages artifact
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - name: Commit updated results (push/schedule only, not PRs)
+        if: github.event_name != 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/registry.json docs/badges docs/index.html
+          git diff --staged --quiet || git commit -m "Update registry results [skip ci]"
+          git push
+
+  deploy-pages:
+    needs: test-registry
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

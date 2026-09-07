@@ -1,0 +1,1 @@
+mcp-conform @ git+https://github.com/jayblast-spec/mcp-conform.git
