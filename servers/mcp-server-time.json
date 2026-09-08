@@ -1,0 +1,9 @@
+{
+  "name": "mcp-server-time",
+  "repo_url": "https://github.com/modelcontextprotocol/servers",
+  "transport": "stdio",
+  "setup_commands": ["pip install ./src/time"],
+  "launch_command": "python -m mcp_server_time",
+  "url": null,
+  "note": "Official MCP reference server (Anthropic/modelcontextprotocol), src/time in the servers monorepo. Registered externally, not built by this project, to prove the registry works on real third-party servers."
+}
