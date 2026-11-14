@@ -25,6 +25,14 @@ A public registry of MCP servers, each continuously tested against the [Model Co
 
 </div>
 
+## Get your server listed
+
+1. Open a pull request adding your server to the registry config at `servers/<server-id>.json` (see existing entries), **or**
+2. Order an [MCP Conformance Report](https://veroputech.gumroad.com/l/mcp-conformance-report-48h) ($79, 48h) and the listing plus README badge is included.
+
+Badge markdown once listed:
+`[![MCP conformance](https://img.shields.io/endpoint?url=https://jayblast-spec.github.io/mcp-registry/badges/<server-id>.json)](https://jayblast-spec.github.io/mcp-registry/)`
+
 ## What It Does
 
 Every entry in `servers/*.json` is a real MCP server (stdio or Streamable HTTP). A GitHub Actions workflow clones or connects to each one, runs the full [mcp-conform](https://github.com/jayblast-spec/mcp-conform) spec-compliance suite against it, and publishes the result as a live shields.io badge — `conformant` (green) or `not conformant` (red), re-tested daily so a badge reflects the server's *current* state, not the state it was in the day it was submitted.
